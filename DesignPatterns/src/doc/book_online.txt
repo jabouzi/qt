@@ -1,0 +1,1 @@
+http://www.ics.com/designpatterns/solutions/pointers.html
