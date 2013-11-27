@@ -3,14 +3,12 @@
 #include <sstream>
 using namespace std;
 
-Complex::Complex(double realPart, double imPart)
-    :   m_R(realPart), m_I(imPart)  /* Member initialization list. */
+Complex::Complex(double realPart, double imPart) : m_R(realPart), m_I(imPart)  /* Member initialization list. */
 { 
     cout << "complex(" << m_R << "," << m_I << ")" << endl;
 }
 
-Complex::Complex(double realPart) : 
-    m_R(realPart), m_I(0) {
+Complex::Complex(double realPart) : m_R(realPart), m_I(0) {
 }
 
 Complex::Complex() : m_R(0.0), m_I(0.0) {
