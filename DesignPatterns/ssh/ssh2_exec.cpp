@@ -73,11 +73,12 @@ static int waitsocket(int socket_fd, LIBSSH2_SESSION *session)
  
 int main(int argc, char *argv[])
 {
-    const char *hostname = "67.205.77.32";
-    const char *commandline = "touch tst.txt";
-    const char *username    = "sshadmin";
-    const char *password    = "70jy9MRBnaHH";
-    const int port    = 22333;
+    const char *hostname = "184.172.55.146";
+    const char *commandline1 = "cd www/cms.skanderjabouzi.com";
+    const char *commandline2 = "svn up";
+    const char *username    = "jabouzic";
+    const char *password    = "7024043";
+    const int port    = 22;
     unsigned long hostaddr;
     int sock;
     struct sockaddr_in sin;
@@ -96,7 +97,7 @@ int main(int argc, char *argv[])
     WSADATA wsadata;
     WSAStartup(MAKEWORD(2,0), &wsadata);
 #endif
-    if (argc > 1)
+    if (argc > 1)exity
         /* must be ip address only */ 
         hostname = argv[1];
  
