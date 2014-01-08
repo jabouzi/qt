@@ -49,7 +49,7 @@ static int waitsocket(int socket_fd, LIBSSH2_SESSION *session)
     fd_set *readfd = NULL;
     int dir;
 
-    timeout.tv_sec = 6000;
+    timeout.tv_sec = 300;
     timeout.tv_usec = 0;
 
     FD_ZERO(&fd);
@@ -58,6 +58,7 @@ static int waitsocket(int socket_fd, LIBSSH2_SESSION *session)
 
     /* now make sure we wait in the correct direction */
     dir = libssh2_session_block_directions(session);
+
 
     if(dir & LIBSSH2_SESSION_BLOCK_INBOUND)
         readfd = &fd;
@@ -73,7 +74,7 @@ static int waitsocket(int socket_fd, LIBSSH2_SESSION *session)
 int main(int argc, char *argv[])
 {
     const char *hostname = "184.172.55.146";
-    const char *commandline = "svn st";
+    const char *commandline = "cd www/cms.skanderjabouzi.com && svn st -qu > ../file 2>&1  && cat ../file";
     const char *username    = "jabouzic";
     const char *password    = "7024043";
     const int port    = 22;
@@ -146,7 +147,9 @@ int main(int argc, char *argv[])
     /* ... start it up. This will trade welcome banners, exchange keys,
      * and setup crypto, compression, and MAC layers
      */
-    while ((rc = libssh2_session_handshake(session, sock)) ==  LIBSSH2_ERROR_EAGAIN);
+    while ((rc = libssh2_session_handshake(session, sock)) ==
+
+            LIBSSH2_ERROR_EAGAIN);
     if (rc) {
         fprintf(stderr, "Failure establishing SSH session: %d\n", rc);
         return -1;
@@ -160,10 +163,14 @@ int main(int argc, char *argv[])
     }
 
     /* read all hosts from here */
-    libssh2_knownhost_readfile(nh, "known_hosts", LIBSSH2_KNOWNHOST_FILE_OPENSSH);
+    libssh2_knownhost_readfile(nh, "known_hosts",
+
+                               LIBSSH2_KNOWNHOST_FILE_OPENSSH);
 
     /* store all known hosts to here */
-    libssh2_knownhost_writefile(nh, "dumpfile", LIBSSH2_KNOWNHOST_FILE_OPENSSH);
+    libssh2_knownhost_writefile(nh, "dumpfile",
+
+                                LIBSSH2_KNOWNHOST_FILE_OPENSSH);
 
     fingerprint = libssh2_session_hostkey(session, &len, &type);
 
@@ -204,7 +211,9 @@ int main(int argc, char *argv[])
 
     if ( strlen(password) != 0 ) {
         /* We could authenticate via password */
-        while ((rc = libssh2_userauth_password(session, username, password)) == LIBSSH2_ERROR_EAGAIN);
+        while ((rc = libssh2_userauth_password(session, username, password)) ==
+
+                LIBSSH2_ERROR_EAGAIN);
         if (rc) {
             fprintf(stderr, "Authentication by password failed.\n");
             goto shutdown;
@@ -213,6 +222,7 @@ int main(int argc, char *argv[])
     else {
         /* Or by public key */
         while ((rc = libssh2_userauth_publickey_fromfile(session, username,
+
                      "/home/user/"
                      ".ssh/id_rsa.pub",
                      "/home/user/"
@@ -231,7 +241,11 @@ int main(int argc, char *argv[])
 #endif
 
     /* Exec non-blocking on the remove host */
-    while( (channel = libssh2_channel_open_session(session)) == NULL && libssh2_session_last_error(session,NULL,NULL,0) == LIBSSH2_ERROR_EAGAIN )
+    while( (channel = libssh2_channel_open_session(session)) == NULL &&
+
+            libssh2_session_last_error(session,NULL,NULL,0) ==
+
+            LIBSSH2_ERROR_EAGAIN )
     {
         waitsocket(sock, session);
     }
@@ -240,7 +254,6 @@ int main(int argc, char *argv[])
         fprintf(stderr,"Error1\n");
         exit( 1 );
     }
-    
     while( (rc = libssh2_channel_exec(channel, commandline)) == LIBSSH2_ERROR_EAGAIN )
     {
         waitsocket(sock, session);
@@ -294,7 +307,10 @@ int main(int argc, char *argv[])
     if( rc == 0 )
     {
         exitcode = libssh2_channel_get_exit_status( channel );
-        libssh2_channel_get_exit_signal(channel, &exitsignal, NULL, NULL, NULL, NULL, NULL);
+
+        libssh2_channel_get_exit_signal(channel, &exitsignal,
+
+                                        NULL, NULL, NULL, NULL, NULL);
     }
 
     if (exitsignal)
@@ -307,7 +323,10 @@ int main(int argc, char *argv[])
     channel = NULL;
 
 shutdown:
-    libssh2_session_disconnect(session, "Normal Shutdown, Thank you for playing");
+
+    libssh2_session_disconnect(session,
+
+                               "Normal Shutdown, Thank you for playing");
     libssh2_session_free(session);
 
 
