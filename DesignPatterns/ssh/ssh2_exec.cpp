@@ -49,7 +49,7 @@ static int waitsocket(int socket_fd, LIBSSH2_SESSION *session)
     fd_set *readfd = NULL;
     int dir;
  
-    timeout.tv_sec = 10;
+    timeout.tv_sec = 300;
     timeout.tv_usec = 0;
  
     FD_ZERO(&fd);
@@ -74,7 +74,7 @@ static int waitsocket(int socket_fd, LIBSSH2_SESSION *session)
 int main(int argc, char *argv[])
 {
     const char *hostname = "184.172.55.146";
-    const char *commandline = "cd www/cms.skanderjabouzi.com && touch s.txt";
+    const char *commandline = "cd www/cms.skanderjabouzi.com && svn up";
     const char *username    = "jabouzic";
     const char *password    = "7024043";
     const int port    = 22;
