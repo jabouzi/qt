@@ -74,8 +74,7 @@ static int waitsocket(int socket_fd, LIBSSH2_SESSION *session)
 int main(int argc, char *argv[])
 {
     const char *hostname = "184.172.55.146";
-    const char *commandline1 = "cd www/cms.skanderjabouzi.com";
-    const char *commandline2 = "svn up";
+    const char *commandline = "cd www/cms.skanderjabouzi.com && touch s.txt";
     const char *username    = "jabouzic";
     const char *password    = "7024043";
     const int port    = 22;
@@ -97,19 +96,19 @@ int main(int argc, char *argv[])
     WSADATA wsadata;
     WSAStartup(MAKEWORD(2,0), &wsadata);
 #endif
-    if (argc > 1)exity
+    //if (argc > 1)
         /* must be ip address only */ 
-        hostname = argv[1];
- 
-    if (argc > 2) {
-        username = argv[2];
-    }
-    if (argc > 3) {
-        password = argv[3];
-    }
-    if (argc > 4) {
-        commandline = argv[4];
-    }
+        //hostname = argv[1];
+ //
+    //if (argc > 2) {
+        //username = argv[2];
+    //}
+    //if (argc > 3) {
+        //password = argv[3];
+    //}
+    //if (argc > 4) {
+        //commandline = argv[4];
+    //}
  
     rc = libssh2_init (0);
 
@@ -252,7 +251,7 @@ int main(int argc, char *argv[])
     }
     if( channel == NULL )
     {
-        fprintf(stderr,"Error\n");
+        fprintf(stderr,"Error1\n");
         exit( 1 );
     }
     while( (rc = libssh2_channel_exec(channel, commandline)) ==
@@ -263,9 +262,10 @@ int main(int argc, char *argv[])
     }
     if( rc != 0 )
     {
-        fprintf(stderr,"Error\n");
+        fprintf(stderr,"Error2\n");
         exit( 1 );
     }
+    
     for( ;; )
     {
         /* loop until we block */ 
